@@ -17,10 +17,10 @@ describe('Promise', function() {
     });
 
     describe('#then', function() {
-        var promise, callback, spy;
+        var deferred, callback, spy;
 
         beforeEach(function() {
-            promise = Ext.create('Ext.Promise');
+            deferred = Ext.create('Ext.Promise');
             callback = jasmine.createSpy('callback');
             spy = jasmine.createSpyObj('spy', ['after']);
             spy.callback = function() {
@@ -29,39 +29,39 @@ describe('Promise', function() {
         });
 
         it('should have a function then', function() {
-            expect(promise.then).toBeDefined();
+            expect(deferred.promise.then).toBeDefined();
         });
 
         it('should call the callback, on resolve', function() {
-            promise.then(callback);
-            promise.resolve();
+            deferred.promise.then(callback);
+            deferred.resolve();
             expect(callback).toHaveBeenCalled();
         });
 
         it('should call it with the scope', function() {
-            promise.then(spy.callback, spy);
-            promise.resolve();
+            deferred.promise.then(spy.callback, spy);
+            deferred.resolve();
             expect(spy.after).toHaveBeenCalled();
         });
 
         it('should call then even if the promise was resolved before', function() {
-            promise.resolve();
-            promise.then(callback);
+            deferred.resolve();
+            deferred.promise.then(callback);
             expect(callback).toHaveBeenCalled();
         });
 
         it('should call then when a async callback is finish', function(done) {
             setTimeout(function() {
-                promise.resolve();
+                deferred.resolve();
                 expect(callback).toHaveBeenCalled();
                 done();
             }, 500);
-            promise.then(callback);
+            deferred.promise.then(callback);
         });
         
         it('should get the resolved value', function() {
-            promise.resolve('foo');
-            promise.then(callback);
+            deferred.resolve('foo');
+            deferred.promise.then(callback);
             expect(callback).toHaveBeenCalledWith('foo');
         });
     });
@@ -72,11 +72,12 @@ describe('Promise', function() {
             Ext.define('munchkin', {
                 mixins: ['Ext.Promise'],
                 loot: function() {
-                    var me = this;
+                    var deferred = this.deferred(),
+                        me = this;
                     setTimeout(function() {
                         me.resolve('a sword');
                     }, 400);
-                    return this;
+                    return deferred.promise;
                 }
             });
             munchkin = Ext.create('munchkin');

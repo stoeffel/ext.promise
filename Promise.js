@@ -1,4 +1,17 @@
 Ext.define('Ext.Promise', function() {
+    Ext.define('Promise', {
+        config: {
+            state: null,
+            resolvedValue: null,
+            thenCallback: null
+        },
+        then: function(callback, scope) {
+            this.thenCallback = callback.bind(scope);
+            if (this.state === Ext.Promise.STATE.FULFILLED) {
+                this.thenCallback(this.resolvedValue);
+            }
+        }
+    });
     return {
         statics: {
             STATE: {
@@ -7,30 +20,23 @@ Ext.define('Ext.Promise', function() {
                 REJECTED: 2
             }
         },
-        
-        config: {
-            state: null,
-            resolvedValue: null,
-            thenCallback: null
-        },
 
         constructor: function() {
-            this.state = Ext.Promise.STATE.PENDING;
+            this.deferred();
         },
 
-
-        then: function(callback, scope) {
-            this.thenCallback = callback.bind(scope);
-            if (this.state === Ext.Promise.STATE.FULFILLED) {
-                this.thenCallback(this.resolvedValue);
-            }
+        deferred: function() {
+            this.promise = Ext.create('Promise');
+            this.promise.state = Ext.Promise.STATE.PENDING;
+            return this;
         },
 
         resolve: function(value) {
-            this.state = Ext.Promise.STATE.FULFILLED;
-            this.resolvedValue = value;
-            if (this.thenCallback) {
-                this.thenCallback(this.resolvedValue);
+            console.log(this);
+            this.promise.state = Ext.Promise.STATE.FULFILLED;
+            this.promise.resolvedValue = value;
+            if (this.promise.thenCallback) {
+                this.promise.thenCallback(this.promise.resolvedValue);
             }
         }
     };

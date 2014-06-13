@@ -34,11 +34,12 @@ var munchkin;
 Ext.define('munchkin', {
     mixins: ['Ext.Promise'],
     loot: function() {
-        var me = this;
+        var deferred = this.deferred(),
+            me = this;
         setTimeout(function() {
             me.resolve('a sword');
         }, 400);
-        return this; // return this
+        return deferred.promise;
     }
 });
 munchkin = Ext.create('munchkin');
