@@ -49,5 +49,20 @@ describe('Promise', function() {
             promise.then(callback);
             expect(callback).toHaveBeenCalled();
         });
+
+        it('should call then when a async callback is finish', function(done) {
+            setTimeout(function() {
+                promise.resolve();
+                expect(callback).toHaveBeenCalled();
+                done();
+            }, 500);
+            promise.then(callback);
+        });
+        
+        it('should get the resolved value', function() {
+            promise.resolve('foo');
+            promise.then(callback);
+            expect(callback).toHaveBeenCalledWith('foo');
+        });
     });
 });

@@ -1,6 +1,7 @@
 Ext.Promise
 ===========
 
+This is a promise library for extjs. It's not promise/a+ compatible at the moment, because I want it to be more like a extjs component.
 
 Usage
 -----

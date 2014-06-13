@@ -1,5 +1,5 @@
 Ext.define('Ext.Promise', function() {
-    var state, thenCallback;
+    var state, thenCallback, resolvedValue;
     return {
         statics: {
             STATE: {
@@ -13,16 +13,20 @@ Ext.define('Ext.Promise', function() {
             state = this.self.STATE.PENDING;
         },
 
+
         then: function(callback, scope) {
             thenCallback = callback.bind(scope);
             if (state === this.self.STATE.FULFILLED) {
-                thenCallback();
+                thenCallback(resolvedValue);
             }
         },
 
-        resolve: function() {
+        resolve: function(value) {
             state = this.self.STATE.FULFILLED;
-            thenCallback();
+            resolvedValue = value;
+            if (thenCallback) {
+                thenCallback(resolvedValue);
+            }
         }
     };
 });
