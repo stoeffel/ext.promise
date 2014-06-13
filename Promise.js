@@ -32,7 +32,6 @@ Ext.define('Ext.Promise', function() {
         },
 
         resolve: function(value) {
-            console.log(this);
             this.promise.state = Ext.Promise.STATE.FULFILLED;
             this.promise.resolvedValue = value;
             if (this.promise.thenCallback) {
