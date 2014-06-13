@@ -50,3 +50,17 @@ munchkin.loot()
     });
 });
 ```
+
+Chains
+------
+```js
+munchkin = Ext.create('munchkin');
+munchkin.loot()
+    .then(function(theLoot) {
+        return 'Loot: ' + theLoot;
+    })
+    .then(function(theLoot) {
+        console.log(theLoot);
+    });
+});
+```
