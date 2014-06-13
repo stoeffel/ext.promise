@@ -1,15 +1,27 @@
 Ext.define('Ext.Promise', function() {
     Ext.define('Promise', {
         config: {
+            deferred: null,
             state: null,
             resolvedValue: null,
             thenCallback: null
         },
+
+        constructor: function(config) {
+            this.state = Ext.Promise.STATE.PENDING;
+            this.deferred = config.deferred;
+        },
+
         then: function(callback, scope) {
-            this.thenCallback = callback.bind(scope);
+            var deferred = Ext.create('Ext.Promise');
+            this.thenCallback = function(value) {
+                value = callback.call(scope, value);
+                deferred.resolve(value);
+            };
             if (this.state === Ext.Promise.STATE.FULFILLED) {
-                this.thenCallback(this.resolvedValue);
+                return this.thenCallback(this.resolvedValue);
             }
+            return deferred.promise;
         }
     });
     return {
@@ -26,8 +38,9 @@ Ext.define('Ext.Promise', function() {
         },
 
         deferred: function() {
-            this.promise = Ext.create('Promise');
-            this.promise.state = Ext.Promise.STATE.PENDING;
+            this.promise = Ext.create('Promise', {
+                deferred: this
+            });
             return this;
         },
 

@@ -16,7 +16,7 @@ describe('Promise', function() {
 
     });
 
-    describe('#then', function() {
+    describe('promise', function() {
         var deferred, callback, spy;
 
         beforeEach(function() {
@@ -63,6 +63,12 @@ describe('Promise', function() {
             deferred.resolve('foo');
             deferred.promise.then(callback);
             expect(callback).toHaveBeenCalledWith('foo');
+        });
+
+        it('should be chainable', function(done) {
+            deferred.promise.then(callback).then(callback).then(done);
+            deferred.resolve();
+            expect(callback.calls.count()).toEqual(2);
         });
     });
 
