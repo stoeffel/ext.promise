@@ -1,5 +1,4 @@
 Ext.define('Ext.Promise', function() {
-    var state, thenCallback, resolvedValue;
     return {
         statics: {
             STATE: {
@@ -8,24 +7,30 @@ Ext.define('Ext.Promise', function() {
                 REJECTED: 2
             }
         },
+        
+        config: {
+            state: null,
+            resolvedValue: null,
+            thenCallback: null
+        },
 
         constructor: function() {
-            state = this.self.STATE.PENDING;
+            this.state = Ext.Promise.STATE.PENDING;
         },
 
 
         then: function(callback, scope) {
-            thenCallback = callback.bind(scope);
-            if (state === this.self.STATE.FULFILLED) {
-                thenCallback(resolvedValue);
+            this.thenCallback = callback.bind(scope);
+            if (this.state === Ext.Promise.STATE.FULFILLED) {
+                this.thenCallback(this.resolvedValue);
             }
         },
 
         resolve: function(value) {
-            state = this.self.STATE.FULFILLED;
-            resolvedValue = value;
-            if (thenCallback) {
-                thenCallback(resolvedValue);
+            this.state = Ext.Promise.STATE.FULFILLED;
+            this.resolvedValue = value;
+            if (this.thenCallback) {
+                this.thenCallback(this.resolvedValue);
             }
         }
     };

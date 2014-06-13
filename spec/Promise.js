@@ -65,4 +65,26 @@ describe('Promise', function() {
             expect(callback).toHaveBeenCalledWith('foo');
         });
     });
+
+    describe('mixin', function() {
+        it('should be possible to use it as a mixin', function(done) {
+            var munchkin;
+            Ext.define('munchkin', {
+                mixins: ['Ext.Promise'],
+                loot: function() {
+                    var me = this;
+                    setTimeout(function() {
+                        me.resolve('a sword');
+                    }, 400);
+                    return this;
+                }
+            });
+            munchkin = Ext.create('munchkin');
+            munchkin.loot()
+                .then(function(theLoot) {
+                    expect(theLoot).toEqual('a sword');
+                    done();
+                });
+        });
+    });
 });
