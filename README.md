@@ -103,3 +103,8 @@ Ext.Ajax.request({
     console.log('ERROR');
 });
 ```
+
+Model
+-----
+
+TODO: model.save model.erase ...
