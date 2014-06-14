@@ -21,7 +21,7 @@ Add the path for `Ext.Promise` to your `app.js`.
 Ext.application({
     name: 'ExampleApp',
     paths: {
-        'Ext.Promise': 'bower_components/ext.promise'
+        'Ext.promise': 'bower_components/ext.promise/lib'
     }
     /* ... */
 });
@@ -32,7 +32,7 @@ As a mixin
 ```js
 var munchkin;
 Ext.define('munchkin', {
-    mixins: ['Ext.Promise'],
+    mixins: ['Ext.promise.Deferred'],
     loot: function() {
         var deferred = this.deferred(),
             me = this;
@@ -45,8 +45,7 @@ Ext.define('munchkin', {
 munchkin = Ext.create('munchkin');
 munchkin.loot()
     .then(function(theLoot) {
-        expect(theLoot).toEqual('a sword');
-        done();
+        console.log(theLoot);
     });
 });
 ```
