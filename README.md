@@ -98,11 +98,8 @@ Now request returns a promise.
 Ext.Ajax.request({
     url: 'test.json'
 }).then(function(response) {
-    var content = Ext.JSON.decode(response.responseText);
-    console.log(response);
-    expect(content).toEqual({
-        success: true
-    });
-    done();
+    console.log('SUCCESS');
+}).fail(function(response) {
+    console.log('ERROR');
 });
 ```
