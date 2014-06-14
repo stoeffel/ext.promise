@@ -38,6 +38,7 @@ Ext.define('munchkin', {
             me = this;
         setTimeout(function() {
             me.resolve('a sword');
+            // me.reject(new Error('ERROR'));
         }, 400);
         return deferred.promise;
     }
