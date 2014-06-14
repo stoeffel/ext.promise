@@ -85,3 +85,24 @@ munchkin.loot()
     });
 });
 ```
+
+Ajax
+----
+You need to require the override class.
+```js
+Ext.require('Ext.promise.override.Ajax', function() {});
+```
+
+Now request returns a promise.
+```js
+Ext.Ajax.request({
+    url: 'test.json'
+}).then(function(response) {
+    var content = Ext.JSON.decode(response.responseText);
+    console.log(response);
+    expect(content).toEqual({
+        success: true
+    });
+    done();
+});
+```
