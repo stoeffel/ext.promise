@@ -46,6 +46,9 @@ munchkin = Ext.create('munchkin');
 munchkin.loot()
     .then(function(theLoot) {
         console.log(theLoot);
+    })
+    .fail(function(error) {
+        console.error(error);
     });
 });
 ```

@@ -25,7 +25,7 @@ describe('Promise', function() {
 
     });
 
-    describe('promise', function() {
+    describe('#then', function() {
         var deferred, callback, spy;
 
         beforeEach(function() {
@@ -97,6 +97,52 @@ describe('Promise', function() {
                 done();
             });
             deferred.resolve();
+        });
+
+    });
+
+    describe('#fail', function() {
+        var deferred, callback, spy;
+        beforeEach(function() {
+            deferred = Ext.create('Ext.promise.Deferred');
+            callback = jasmine.createSpy('callback');
+            spy = jasmine.createSpyObj('spy', ['after']);
+            spy.callback = function() {
+                this.after();
+            };
+        });
+
+        it('should have a function fail', function() {
+            expect(deferred.promise.fail).toBeDefined();
+        });
+
+        it('should call the callback, on reject', function() {
+            deferred.promise.fail(callback);
+            deferred.reject();
+            expect(callback).toHaveBeenCalled();
+        });
+
+        it('should not call then callback on reject', function() {
+            deferred.promise.then(callback);
+            deferred.reject();
+            expect(callback).not.toHaveBeenCalled();
+        });
+
+        it('should resolve new promise in fail', function(done) {
+            deferred.promise.fail(function() {
+                var deferred2 = Ext.create('Ext.promise.Deferred');
+                setTimeout(function() {
+                    deferred2.resolve('bar');
+                }, 500);
+                return deferred2.promise;
+            }).then(function(value) {
+                expect(value).toEqual('bar');
+                return true;
+            }).then(function(value) {
+                expect(value).toBeTruthy();
+                done();
+            });
+            deferred.reject();
         });
 
     });
