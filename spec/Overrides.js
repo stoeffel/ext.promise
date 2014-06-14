@@ -21,13 +21,13 @@ describe('Overrides', function() {
 
         it('should return a promise', function() {
             expect(Ext.Ajax.request({
-                url: 'test.json'
+                url: './spec/fixtures/test.json'
             }).then).toBeDefined();
         });
 
         it('should call then on success', function(done) {
             Ext.Ajax.request({
-                url: 'test.json'
+                url: './spec/fixtures/test.json'
             }).then(function(response) {
                 var content = Ext.JSON.decode(response.responseText);
                 console.log(response);
