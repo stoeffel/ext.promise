@@ -75,10 +75,30 @@ describe('Promise', function() {
         });
 
         it('should be chainable', function(done) {
-            deferred.promise.then(callback).then(callback).then(done);
+            deferred.promise.then(callback).then(callback).then(function() {
+                expect(callback.calls.count()).toEqual(2);
+                done();
+            });
             deferred.resolve();
-            expect(callback.calls.count()).toEqual(2);
         });
+
+        it('should resolve new promise in then', function(done) {
+            deferred.promise.then(callback).then(function() {
+                var deferred2 = Ext.create('Ext.promise.Deferred');
+                setTimeout(function() {
+                    deferred2.resolve('bar');
+                }, 500);
+                return deferred2.promise;
+            }).then(function(value) {
+                expect(value).toEqual('bar');
+                return true;
+            }).then(function(value) {
+                expect(value).toBeTruthy();
+                done();
+            });
+            deferred.resolve();
+        });
+
     });
 
     describe('mixin', function() {
