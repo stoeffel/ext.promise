@@ -107,4 +107,25 @@ Ext.Ajax.request({
 Model
 -----
 
-TODO: model.save model.erase ...
+You need to require the override class.
+```js
+Ext.require('Ext.promise.override.Model', function() {});
+```
+
+Loading a record.
+```js
+Ext.define('MyApp.User', {
+    extend: 'Ext.data.Model',
+    fields: [
+        {name: 'id', type: 'int'},
+        {name: 'name', type: 'string'}
+    ]
+});
+
+MyApp.User.load(10)
+    .then(function(record) {
+        console.log('SUCCESS');
+    }).fail(function() {
+        console.log('ERROR');
+    });
+```
