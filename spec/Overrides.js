@@ -16,6 +16,18 @@ describe('Overrides', function() {
         });
     });
 
+    describe('Ext.require', function() {
+        beforeEach(function(done) {
+            Ext.require('Ext.promise.override.Require', function() {
+                done();
+            });
+        });
+        it('should return a promise', function(done) {
+            Ext.require(['Ext.promise.override.*']).then(function() {
+                done();
+            });
+        });
+    });
     describe('Ajax', function() {
         beforeEach(function(done) {
             Ext.require('Ext.promise.override.Ajax', function() {
@@ -67,7 +79,7 @@ describe('Overrides', function() {
                 Fixtures.Model.load(1).then(function(record) {
                     expect(record.get('name')).toEqual('Stoeffel');
                     done();
-                });
+                }).fail(Ext.emptyFn);
             });
 
             it('should call fail on error', function(done) {
