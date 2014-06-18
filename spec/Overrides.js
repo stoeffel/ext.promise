@@ -94,5 +94,14 @@ describe('Overrides', function() {
                 });
             });
         });
+
+        describe('#erase', function() {
+            it('should call then on success', function(done) {
+                var model = new Fixtures.Model();
+                model.erase().then(function(record) {
+                    done();
+                });
+            });
+        });
     });
 });
