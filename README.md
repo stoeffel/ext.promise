@@ -86,6 +86,21 @@ munchkin.loot()
 });
 ```
 
+Require
+-------
+You need to require the override class.
+```js
+Ext.require('Ext.promise.override.Require', function() {});
+```
+
+Now you can use `Ext.require` as promised.
+```js
+Ext.require(['App.foo.*, 'App.model.User'])
+    .then(function() {
+        console.log('loaded');
+    });
+```
+
 Ajax
 ----
 You need to require the override class.
