@@ -138,6 +138,7 @@ var user = Ext.create('MyApp.User', {
 user.save()
     .then(this.onSave, this)
     .fail(this.onError, this)
+```
 
 Deleting a model
 ```js
