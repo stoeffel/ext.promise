@@ -129,3 +129,13 @@ MyApp.User.load(10)
         console.log('ERROR');
     });
 ```
+
+Saving a model
+```js
+var user = Ext.create('MyApp.User', {
+    name: 'Stoeffel'
+});
+user.save()
+    .then(this.onSave, this)
+    .fail(this.onError, this)
+```
