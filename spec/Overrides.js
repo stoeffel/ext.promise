@@ -85,5 +85,14 @@ describe('Overrides', function() {
                 });
             });
         });
+        describe('#save', function() {
+            it('should call then on success', function(done) {
+                var model = new Fixtures.Model();
+                model.save().then(function(record) {
+                    expect(record.get('name')).toEqual('Stoeffel');
+                    done();
+                });
+            });
+        });
     });
 });
