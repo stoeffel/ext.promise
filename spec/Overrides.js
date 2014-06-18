@@ -58,14 +58,13 @@ describe('Overrides', function() {
             });
         });
 
-        describe('#load', function() {
+        describe('#load (static)', function() {
             it('should return a promise', function() {
                 expect(Fixtures.Model.load(1).then).toBeDefined();
             });
 
             it('should call then on success', function(done) {
                 Fixtures.Model.load(1).then(function(record) {
-                    console.log(record);
                     expect(record.get('name')).toEqual('Stoeffel');
                     done();
                 });
@@ -73,6 +72,13 @@ describe('Overrides', function() {
 
             it('should call fail on error', function(done) {
                 Fixtures.Model.load(2).fail(function() {
+                    done();
+                });
+            });
+        });
+        describe('#load', function() {
+            it('should call fail on error', function(done) {
+                (new Fixtures.Model()).load().fail(function(record) {
                     done();
                 });
             });

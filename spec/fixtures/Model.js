@@ -36,5 +36,8 @@ Ext.define('Fixtures.Model', {
             }
             return this.callParent([id, options, session]);
         }
+    },
+    load: function() {
+        return this.callParent(arguments);
     }
 });
