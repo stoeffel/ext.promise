@@ -53,7 +53,7 @@ describe('Overrides', function() {
 
     describe('Model', function() {
         beforeEach(function(done) {
-            Ext.require(['Ext.promise.override.Model', 'Fixtures.Model'], function() {
+            Ext.require(['Ext.promise.override.Model', 'Fixtures.Model', 'Fixtures.ErrorModel'], function() {
                 done();
             });
         });
@@ -71,14 +71,16 @@ describe('Overrides', function() {
             });
 
             it('should call fail on error', function(done) {
-                Fixtures.Model.load(2).fail(function() {
+                Fixtures.ErrorModel.load(2).fail(function() {
                     done();
                 });
             });
         });
         describe('#load', function() {
-            it('should call fail on error', function(done) {
-                (new Fixtures.Model()).load().fail(function(record) {
+            it('should call then on success', function(done) {
+                var model = new Fixtures.Model();
+                model.load().then(function(record) {
+                    expect(record.get('name')).toEqual('Stoeffel');
                     done();
                 });
             });
