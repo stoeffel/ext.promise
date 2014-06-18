@@ -54,7 +54,7 @@ munchkin.loot()
 });
 ```
 
-Chains
+Chains (WIP)
 ------
 `then` is chainable. It gets the last returned value;
 ```js
