@@ -88,7 +88,7 @@ describe('Promise', function() {
             expect(callback).toHaveBeenCalledWith('foo');
         });
 
-        xit('should be chainable', function(done) {
+        it('should be chainable', function(done) {
             deferred.promise.then(callback).then(callback).then(function() {
                 expect(callback.calls.count()).toEqual(2);
                 done();
