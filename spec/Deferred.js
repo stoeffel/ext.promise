@@ -53,6 +53,12 @@ describe('Promise', function() {
             expect(spy.after).toHaveBeenCalled();
         });
 
+        it('should call it with the scope if there is an onRejected callback', function() {
+            deferred.promise.then(spy.callback, Ext.emptyFn, spy);
+            deferred.resolve();
+            expect(spy.after).toHaveBeenCalled();
+        });
+
         it('should call then even if the promise was resolved before', function() {
             deferred.resolve();
             deferred.promise.then(callback);
