@@ -145,6 +145,14 @@ describe('Promise', function() {
             expect(callback).not.toHaveBeenCalled();
         });
 
+        it('should only be called once', function() {
+            deferred.reject();
+            deferred.promise.then(Ext.emptyFn, callback);
+            deferred.reject();
+            deferred.reject();
+            expect(callback.calls.count()).toEqual(1);
+        });
+
         xit('should resolve new promise in fail', function(done) {
             deferred.promise.fail(function() {
                 var deferred2 = Ext.create('Ext.promise.Deferred');
