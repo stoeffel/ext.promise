@@ -47,6 +47,14 @@ describe('Promise', function() {
             expect(callback).toHaveBeenCalled();
         });
 
+        it('should call the callback, only once', function() {
+            deferred.resolve();
+            deferred.promise.then(callback).fail(function(){});
+            deferred.resolve();
+            deferred.resolve();
+            expect(callback.calls.count()).toEqual(1);
+        });
+
         it('should call it with the scope', function() {
             deferred.promise.then(spy.callback, spy);
             deferred.resolve();
