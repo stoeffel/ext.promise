@@ -125,6 +125,12 @@ describe('Promise', function() {
             expect(callback).toHaveBeenCalled();
         });
 
+        it('should call the onRejected, given to then', function() {
+            deferred.promise.then(Ext.emptyFn, callback);
+            deferred.reject();
+            expect(callback).toHaveBeenCalled();
+        });
+
         it('should not call then callback on reject', function() {
             deferred.promise.then(callback);
             deferred.reject();
