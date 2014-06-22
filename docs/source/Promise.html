@@ -47,12 +47,12 @@ Ext.define('Ext.promise.Promise', function() {
 <span id='Ext-promise-Promise-method-then'>        /**
 </span>         * Then defines what should happen, when the promise is resolved.
          * @param {Function} onFulfilled The function called, when the promise is resolved.
-         * @param {Function} [onFulfilled] The function called, when the promise is rejected.
+         * @param {Function} [onRejected] The function called, when the promise is rejected.
          * @param {Object} [scope] The scope of the called function.
          * @return {Ext.promise.Promise} A new promise.
          */
         then: function(onFulfilled, onRejected, scope) {
-            this.onRejected = this.createCallback(Ext.emptyFn, this);
+            this.onRejected = this.onFulfilled || this.createCallback(Ext.emptyFn, this);
             if (Ext.isFunction(onRejected)) {
                 this.onRejected = this.createCallback(onRejected, scope);
             } else if (Ext.isObject(onRejected)) {
@@ -64,6 +64,11 @@ Ext.define('Ext.promise.Promise', function() {
             return this.next();
         },
 
+<span id='Ext-promise-Promise-method-resolve'>        /**
+</span>         * Resolve is called by Ext.promise.Deferred when the asynchronous function is completed
+         * This function calls a given onFulfilled function.
+         * The function takes one or more arguments, which are passed to the onFulfilled function.
+         */
         resolve: function() {
             this.resolvedValue = arguments;
             if (this.state === this.statics().STATE.PENDING) {
@@ -74,14 +79,25 @@ Ext.define('Ext.promise.Promise', function() {
             }
         },
 
+<span id='Ext-promise-Promise-method-fail'>        /**
+</span>         * Then defines what should happen, when the promise is rejected.
+         * @param {Function} onRejected The function called, when the promise is rejected.
+         * @param {Object} [scope] The scope of the called function.
+         * @return {Ext.promise.Promise} A new promise.
+         */
         fail: function(onRejected, scope) {
-            this.onFulfilled = this.createCallback(Ext.emptyFn, scope);
+            this.onFulfilled = this.onFulfilled || this.createCallback(Ext.emptyFn, scope);
             this.onRejected = this.createCallback(onRejected, scope);
 
             this.checkNotPending();
             return this.next();
         },
 
+<span id='Ext-promise-Promise-method-reject'>        /**
+</span>         * Reject is called by Ext.promise.Deferred when the asynchronous function fails
+         * This function calls a given onRejected function.
+         * The function takes one or more arguments, which are passed to the onRejected function.
+         */
         reject: function() {
             this.rejectedError = arguments;
             if (this.state === this.statics().STATE.PENDING) {
@@ -93,6 +109,13 @@ Ext.define('Ext.promise.Promise', function() {
         },
 
         privates: {
+<span id='Ext-promise-Promise-method-createCallback'>            /**
+</span>             * creates a new callback for onFulfilled/onRejected.
+             * After the callback it resolves/rejects the next promise.
+             * @param {Function} callback The function to wrap.
+             * @param {Object} scope The functions scope
+             * @return {Function} The callback.
+             */
             createCallback: function(callback, scope) {
                 var me = this,
                     statics = me.statics();
@@ -108,6 +131,10 @@ Ext.define('Ext.promise.Promise', function() {
                 };
             },
 
+<span id='Ext-promise-Promise-method-next'>            /**
+</span>             * returns the next Ext.promise.Promise
+             * @return {Ext.promise.Promise} A new promise.
+             */
             next: function() {
                 if (!this.nextPromise) {
                     this.nextPromise = Ext.create('Ext.promise.Promise');
@@ -115,6 +142,9 @@ Ext.define('Ext.promise.Promise', function() {
                 return this.nextPromise;
             },
 
+<span id='Ext-promise-Promise-method-checkNotPending'>            /**
+</span>             * Checks if the promise is already fulfilled or rejected.
+             */
             checkNotPending: function() {
                 if (this.state === this.statics().STATE.FULFILLED) {
                     this.state = this.statics().STATE.PENDING;
