@@ -26,13 +26,14 @@ describe('Promise', function() {
     });
 
     describe('#then', function() {
-        var deferred, callback, spy;
+        var deferred, onFulfilled, onRejected, spy;
 
         beforeEach(function() {
             deferred = Ext.create('Ext.promise.Deferred');
-            callback = jasmine.createSpy('callback');
+            onFulfilled = jasmine.createSpy('onFulfilled');
+            onRejected = jasmine.createSpy('onRejected');
             spy = jasmine.createSpyObj('spy', ['after']);
-            spy.callback = function() {
+            spy.onFulfilled = function() {
                 this.after();
             };
         });
@@ -41,56 +42,57 @@ describe('Promise', function() {
             expect(deferred.promise.then).toBeDefined();
         });
 
-        it('should call the callback, on resolve', function() {
-            deferred.promise.then(callback).fail(function(){});
+        it('should call the onFulfilled, on resolve', function() {
+            deferred.promise.then(onFulfilled).fail(function(){});
             deferred.resolve();
-            expect(callback).toHaveBeenCalled();
+            expect(onFulfilled).toHaveBeenCalled();
         });
 
-        it('should call the callback, only once', function() {
+        it('should call the onFulfilled, only once', function() {
             deferred.resolve();
-            deferred.promise.then(callback).fail(function(){});
+            deferred.promise.then(onFulfilled).fail(function(){});
             deferred.resolve();
             deferred.resolve();
-            expect(callback.calls.count()).toEqual(1);
+            expect(onFulfilled.calls.count()).toEqual(1);
         });
 
         it('should call it with the scope', function() {
-            deferred.promise.then(spy.callback, spy);
+            deferred.promise.then(spy.onFulfilled, spy);
             deferred.resolve();
             expect(spy.after).toHaveBeenCalled();
         });
 
         it('should call it with the scope if there is an onRejected callback', function() {
-            deferred.promise.then(spy.callback, Ext.emptyFn, spy);
+            deferred.promise.then(spy.onFulfilled, Ext.emptyFn, spy);
             deferred.resolve();
             expect(spy.after).toHaveBeenCalled();
         });
 
         it('should call then even if the promise was resolved before', function() {
             deferred.resolve();
-            deferred.promise.then(callback);
-            expect(callback).toHaveBeenCalled();
+            deferred.promise.then(onFulfilled);
+            expect(onFulfilled).toHaveBeenCalled();
         });
 
-        it('should call then when a async callback is finish', function(done) {
+        it('should call then when a async onFulfilled is finish', function(done) {
             setTimeout(function() {
                 deferred.resolve();
-                expect(callback).toHaveBeenCalled();
+                expect(onFulfilled).toHaveBeenCalled();
                 done();
             }, 500);
-            deferred.promise.then(callback);
+            deferred.promise.then(onFulfilled);
         });
 
         it('should get the resolved value', function() {
             deferred.resolve('foo');
-            deferred.promise.then(callback);
-            expect(callback).toHaveBeenCalledWith('foo');
+            deferred.promise.then(onFulfilled);
+            expect(onFulfilled).toHaveBeenCalledWith('foo');
         });
 
         it('should be chainable', function(done) {
-            deferred.promise.then(callback).then(callback).then(function() {
-                expect(callback.calls.count()).toEqual(2);
+            deferred.promise.fail(onRejected).then(onFulfilled).then(onFulfilled).fail(onRejected).then(function() {
+                expect(onFulfilled.calls.count()).toEqual(2);
+                expect(onRejected.calls.count()).toEqual(0);
                 done();
             });
             deferred.resolve();
