@@ -98,18 +98,23 @@ describe('Promise', function() {
             deferred.resolve();
         });
 
-        xit('should resolve new promise in then', function(done) {
+        it('should resolve the returned value', function(done) {
             deferred.promise.then(function() {
-                var deferred2 = Ext.create('Ext.promise.Deferred');
-                setTimeout(function() {
-                    deferred2.resolve('bar');
-                }, 500);
-                return deferred2.promise;
+                return 'bar';
             }).then(function(value) {
                 expect(value).toEqual('bar');
                 done();
             });
-            deferred.resolve();
+            deferred.resolve('foo');
+        });
+
+        it('should resolve the original value if nothing returned', function(done) {
+            deferred.promise.then(function() {
+            }).then(function(value) {
+                expect(value).toEqual('foo');
+                done();
+            });
+            deferred.resolve('foo');
         });
 
     });
@@ -155,18 +160,14 @@ describe('Promise', function() {
             expect(callback.calls.count()).toEqual(1);
         });
 
-        xit('should resolve new promise in fail', function(done) {
+        it('should resolve new promise in fail', function(done) {
             deferred.promise.fail(function() {
-                var deferred2 = Ext.create('Ext.promise.Deferred');
-                setTimeout(function() {
-                    deferred2.resolve('bar');
-                }, 500);
-                return deferred2.promise;
-            }).then(function(value) {
+                return 'bar';
+            }).fail(function(value) {
                 expect(value).toEqual('bar');
                 done();
             });
-            deferred.reject();
+            deferred.reject('foo');
         });
 
     });
