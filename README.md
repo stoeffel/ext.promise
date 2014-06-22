@@ -54,7 +54,7 @@ munchkin.loot()
 });
 ```
 
-Chains (WIP)
+Chains
 ------
 `then` is chainable. It gets the last returned value;
 ```js
@@ -64,11 +64,11 @@ munchkin.loot()
         return 'Loot: ' + theLoot;
     })
     .then(function(theLoot) {
-        console.log(theLoot);
+        console.log(theLoot); // -> Loot: a sword
     });
 });
 ```
-
+### (WIP)
 It is even possible to return a new promise in a `then`.
 ```js
 munchkin = Ext.create('munchkin');
