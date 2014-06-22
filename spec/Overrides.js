@@ -76,7 +76,7 @@ describe('Overrides', function() {
             });
 
             it('should call then on success', function(done) {
-                Fixtures.Model.load(1).then(function(record) {
+                Fixtures.Model.load(1).fail(Ext.emptyFn).then(function(record) {
                     expect(record.get('name')).toEqual('Stoeffel');
                     done();
                 }).fail(Ext.emptyFn);
