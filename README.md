@@ -68,7 +68,6 @@ munchkin.loot()
     });
 });
 ```
-### (WIP)
 It is even possible to return a new promise in a `then`.
 ```js
 munchkin = Ext.create('munchkin');

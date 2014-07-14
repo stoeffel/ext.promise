@@ -98,6 +98,36 @@ describe('Promise', function() {
             deferred.resolve();
         });
 
+        it('should be chainable by returning a new promise', function(done) {
+            deferred.promise.fail(onRejected).then(function(value){
+                var p = Ext.create('Ext.promise.Deferred');
+                p.resolve(42);
+                return p.promise;
+            }).then(function(value) {
+                expect(value).toEqual(42);
+                done();
+            });
+            deferred.resolve();
+        });
+
+
+        it('should be chainable by returning a new promise with fail', function(done) {
+            deferred.promise.then(function(value){
+                var p = Ext.create('Ext.promise.Deferred');
+                p.reject(42);
+                return p.promise;
+            }).fail(function(value) {
+                var p = Ext.create('Ext.promise.Deferred');
+                p.resolve('bad');
+                expect(value).toEqual(42);
+                return p.promise;
+            }).then(function(value) {
+                expect(value).toEqual('bad');
+                done();
+            });
+            deferred.resolve();
+        });
+
         it('should resolve the returned value', function(done) {
             deferred.promise.then(function() {
                 return 'bar';
