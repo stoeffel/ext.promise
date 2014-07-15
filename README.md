@@ -50,6 +50,9 @@ munchkin.loot()
     })
     .fail(function(error) {
         console.error(error);
+    })
+    .done(function(value) {
+        console.log('Done is allways invoked');
     });
 });
 ```

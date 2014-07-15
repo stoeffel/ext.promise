@@ -202,6 +202,32 @@ describe('Promise', function() {
 
     });
 
+    describe('#done', function() {
+        var deferred, allways;
+
+        beforeEach(function() {
+            deferred = Ext.create('Ext.promise.Deferred');
+            allways = function(done, expected) {
+                return function(value) {
+                    expect(value).toEqual(expected);
+                    done();
+                };
+            };
+        });
+
+        it('should be called on resolve', function(done) {
+            deferred.promise.then(function(value){
+                return value;
+            }).done(allways(done, 'onFulfilled'));
+            deferred.resolve('onFulfilled');
+        });
+
+        it('should be called on reject', function(done) {
+            deferred.promise.done(allways(done, 'onRejected'));
+            deferred.reject('onRejected');
+        });
+    });
+
     describe('mixin', function() {
         it('should be possible to use it as a mixin', function(done) {
             var munchkin;
