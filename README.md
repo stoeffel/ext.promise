@@ -47,6 +47,29 @@ var promise = create();
 var result = promise.then().returns(); // 42
 ```
 
+### all
+
+`all` waits for all promises to be resolved
+
+```js
+Ext.Promises.all([d1.promise, d2.promise]).then(function() {
+    expect(d1.promise.state).toEqual(FULFILLED);
+    expect(d2.promise.state).toEqual(FULFILLED);
+    done();
+});
+```
+
+### some
+
+`some` waits for the first promise to be resolved
+
+```js
+Ext.Promises.all([d1.promise, d2.promise]).fail(function() {
+    expect(d1.promise.state).toEqual(FULFILLED);
+    done();
+});
+```
+
 
 As a mixin
 ----------
