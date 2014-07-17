@@ -28,6 +28,22 @@ describe('Overrides', function() {
             });
         });
     });
+
+    describe('Ext.Msg', function() {
+        beforeEach(function(done) {
+            Ext.require('Ext.promise.override.Msg', function() {
+                done();
+            });
+        });
+        it('should return a promise', function(done) {
+            Ext.Msg.alert('hello', 'world').then(function(yes) {
+                expect(yes).toEqual('cancel');
+                done();
+            });
+            Ext.WindowMgr.getActive().close();
+        });
+    });
+
     describe('Ajax', function() {
         beforeEach(function(done) {
             Ext.require('Ext.promise.override.Ajax', function() {

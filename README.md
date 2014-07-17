@@ -163,3 +163,24 @@ user.erase()
     .then(this.onSave, this)
     .fail(this.onError, this)
 ```
+
+
+Ext.Msg / Ext.MessageBox
+------------------------
+
+You need to require the override class:
+
+```js
+Ext.require('Ext.promise.override.Msg', function() {});
+```
+
+Show an alert message:
+
+```js
+Ext.Msg.alert('Error','Sorry, this should not happen')
+    .then(function(btn){
+        console.log(btn);
+    });
+```
+
+Note that Ext.Msg.show / Ext.MessageBox.show does NOT return the original Ext.window.MessageBox object, instead you get a promise object.
