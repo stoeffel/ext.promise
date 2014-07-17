@@ -41,6 +41,19 @@ describe('Collection', function() {
             d2.resolve();
         });
 
+        it('should invoke the onFulfilled on the promise to', function(done) {
+            Ext.Promises.all([d1.promise, d2.promise]).then(function() {
+                expect(d1.promise.state).toEqual(FULFILLED);
+                expect(d2.promise.state).toEqual(FULFILLED);
+                done();
+            });
+            d2.promise.next().then(function(value) {
+                expect(value).toEqual(42);
+            });
+            d1.resolve(666);
+            d2.resolve(42);
+        });
+
         it('should call onRejected if one promise fails', function(done) {
             Ext.Promises.all([d1.promise, d2.promise]).fail(function() {
                 expect(d1.promise.state).toEqual(FULFILLED);
