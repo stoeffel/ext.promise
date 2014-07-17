@@ -27,6 +27,27 @@ Ext.application({
 });
 ```
 
+If you need to access a return value instead of the returned Promise object, use returns():
+
+```js
+// msgBox has the instance of Ext.window.MessageBox, which is the original value of Ext.Msg.alert.
+var msgBox = Ext.Msg.alert().then().returns();
+```
+
+To return your own value, use Ext.promise.Promise.returnValue:
+
+```js
+function create() {
+    var deferred = Ext.create('Ext.promise.Deferred');
+    deferred.promise.returnValue = 42;
+    return deferred.promise;    
+}
+
+var promise = create();
+var result = promise.then().returns(); // 42
+```
+
+
 As a mixin
 ----------
 ```js

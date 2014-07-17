@@ -40,7 +40,21 @@ describe('Overrides', function() {
                 expect(yes).toEqual('cancel');
                 done();
             });
-            Ext.WindowMgr.getActive().close();
+            setTimeout(function(){
+                Ext.WindowMgr.getActive().close();
+            },200);
+            
+        });
+
+        it('shoud be possible to fetch the MessageBox via returns()', function(done) {
+            var msgBox = Ext.Msg.alert('hello', 'world').then(function(yes) {
+                expect(yes).toEqual('cancel');
+                done();
+            }).returns();
+            setTimeout(function(){
+                expect(msgBox instanceof Ext.window.MessageBox).toBeTruthy();
+                msgBox.close();
+            },200);
         });
     });
 
