@@ -1,13 +1,22 @@
 describe('Collection', function() {
-    var p0, p1;
+    var never, d0, d1, d2, FULFILLED, REJECTED, PENDING;
     beforeEach(function(done) {
         Ext.Loader.setPath('Ext.promise', './lib');
         Ext.application({
             name: 'Promise',
 
             launch: function() {
+                never = function() {
+                    expect(false).toBeTruthy();
+                };
+
                 Ext.require(['Ext.promise.Deferred', 'Ext.promise.Collection'], function() {
-                    p0 = Ext.create('Ext.promise.Deferred');
+                    FULFILLED = Ext.promise.Promise.STATE.FULFILLED;
+                    PENDING = Ext.promise.Promise.STATE.PENDING;
+                    REJECTED = Ext.promise.Promise.STATE.REJECTED;
+                    d0 = Ext.create('Ext.promise.Deferred');
+                    d1 = Ext.create('Ext.promise.Deferred');
+                    d2 = Ext.create('Ext.promise.Deferred');
                     done();
                 });
             }
@@ -15,12 +24,51 @@ describe('Collection', function() {
     });
 
     describe('all', function() {
-        it('should wait for all promises to be resolved', function(done) {
-            Ext.Promise.all([p0]).then(function() {
+        it('should wait for a promise to be resolved', function(done) {
+            Ext.Promises.all(d0.promise).then(function() {
                 done();
             });
-            p0.resolve();
+            d0.resolve();
         });
 
+        it('should wait for an array of promises to be resolved', function(done) {
+            Ext.Promises.all([d1.promise, d2.promise]).then(function() {
+                expect(d1.promise.state).toEqual(FULFILLED);
+                expect(d2.promise.state).toEqual(FULFILLED);
+                done();
+            });
+            d1.resolve();
+            d2.resolve();
+        });
+
+        it('should call onRejected if one promise fails', function(done) {
+            Ext.Promises.all([d1.promise, d2.promise]).fail(function() {
+                expect(d1.promise.state).toEqual(FULFILLED);
+                expect(d2.promise.state).toEqual(REJECTED);
+                done();
+            });
+            d1.resolve();
+            d2.reject();
+        });
+    });
+
+    describe('some', function() {
+        it('should wait for the first promise to be resolved', function(done) {
+            Ext.Promises.some([d1.promise, d2.promise]).then(function() {
+                expect(d1.promise.state).toEqual(FULFILLED);
+                done();
+            }).fail(never);
+            d1.resolve();
+            d2.reject();
+        });
+
+        it('should call onRejected if the first promise is rejected', function(done) {
+            Ext.Promises.some([d1.promise, d2.promise]).then(never).fail(function() {
+                expect(d1.promise.state).toEqual(REJECTED);
+                done();
+            });
+            d1.reject();
+            d2.resolve();
+        });
     });
 });
