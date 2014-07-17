@@ -27,6 +27,27 @@ Ext.application({
 });
 ```
 
+If you need to access a return value instead of the returned Promise object, use returns():
+
+```js
+// msgBox has the instance of Ext.window.MessageBox, which is the original value of Ext.Msg.alert.
+var msgBox = Ext.Msg.alert().then().returns();
+```
+
+To return your own value, use Ext.promise.Promise.returnValue:
+
+```js
+function create() {
+    var deferred = Ext.create('Ext.promise.Deferred');
+    deferred.promise.returnValue = 42;
+    return deferred.promise;    
+}
+
+var promise = create();
+var result = promise.then().returns(); // 42
+```
+
+
 As a mixin
 ----------
 ```js
@@ -163,3 +184,24 @@ user.erase()
     .then(this.onSave, this)
     .fail(this.onError, this)
 ```
+
+
+Ext.Msg / Ext.MessageBox
+------------------------
+
+You need to require the override class:
+
+```js
+Ext.require('Ext.promise.override.Msg', function() {});
+```
+
+Show an alert message:
+
+```js
+Ext.Msg.alert('Error','Sorry, this should not happen')
+    .then(function(btn){
+        console.log(btn);
+    });
+```
+
+Note that Ext.Msg.show / Ext.MessageBox.show does NOT return the original Ext.window.MessageBox object, instead you get a promise object.

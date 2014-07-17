@@ -23,6 +23,7 @@
         "it"  : false,
         "expect"  : false,
         "beforeEach"  : false,
-        "jasmine"  : false
+        "jasmine"  : false,
+        "Fixtures": false
     }
 }

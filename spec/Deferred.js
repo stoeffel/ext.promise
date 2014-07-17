@@ -250,4 +250,43 @@ describe('Promise', function() {
                 });
         });
     });
+
+    describe('#returns', function(){
+        var deferred, allways;
+
+        beforeEach(function() {
+            deferred = Ext.create('Ext.promise.Deferred');
+        });
+
+        it ('should return the returnValue of the Promise', function() {
+            deferred.promise.returnValue = 42;
+            var result = deferred.promise.then(function(){
+
+            }).returns();
+            expect(result).toEqual(42);
+        });
+
+        it ('should return the returnValue of the Promise even if chained', function() {
+            deferred.promise.returnValue = 42;
+            var result = deferred.promise.then(function(){
+                var d = Ext.create('Ext.promise.Deferred');
+                d.promise.returnValue = 44;
+                return d.promise;
+            }).then(function() {
+
+            }).returns();
+            expect(result).toEqual(42);
+        });
+
+        it ('should return the returnValue the first promise', function() {
+            deferred.promise.returnValue = 42;
+            var result = deferred.promise.returns();
+            expect(result).toEqual(42);
+        });
+
+        it ('should return the returnValue of null if returnValue is not set.', function() {
+            var result = deferred.promise.returns();
+            expect(result).toBeNull();
+        });
+    });
 });

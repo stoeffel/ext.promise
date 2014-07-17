@@ -28,6 +28,36 @@ describe('Overrides', function() {
             });
         });
     });
+
+    describe('Ext.Msg', function() {
+        beforeEach(function(done) {
+            Ext.require('Ext.promise.override.Msg', function() {
+                done();
+            });
+        });
+        it('should return a promise', function(done) {
+            Ext.Msg.alert('hello', 'world').then(function(yes) {
+                expect(yes).toEqual('cancel');
+                done();
+            });
+            setTimeout(function(){
+                Ext.WindowMgr.getActive().close();
+            },200);
+            
+        });
+
+        it('shoud be possible to fetch the MessageBox via returns()', function(done) {
+            var msgBox = Ext.Msg.alert('hello', 'world').then(function(yes) {
+                expect(yes).toEqual('cancel');
+                done();
+            }).returns();
+            setTimeout(function(){
+                expect(msgBox instanceof Ext.window.MessageBox).toBeTruthy();
+                msgBox.close();
+            },200);
+        });
+    });
+
     describe('Ajax', function() {
         beforeEach(function(done) {
             Ext.require('Ext.promise.override.Ajax', function() {
