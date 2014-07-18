@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Documentation - JSDuck</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="fragment" content="!">
+
+  
+
+  <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
+  <link rel="stylesheet" href="resources/css/app-4689d2a5522dcd3c9e9923ca59c33f27.css" type="text/css" />
+  <link rel="stylesheet" href="styles-3eba09980fa05ead185cb17d9c0deb0f.css" type="text/css" />
+
+  <script type="text/javascript" src="extjs/ext-all.js"></script>
+  <script type="text/javascript" src="data-f650229899023a55d29dd79c7b4b14aa.js"></script>
+
+  <script type="text/javascript" src="app-0c945a27f43452df695771ddb60b3d14.js"></script>
+
+  
+
+</head>
+<body id="ext-body">
+
+  <div id="loading"><span class="title">Documentation - JSDuck</span><span class="logo"></span></div>
+
+  <div id="header-content"><strong>Documentation</strong> JSDuck</div>
+  <div id='welcome-content' style='display:none'><div class="markdown"><h1>Ext.Promise</h1>
+
+<p>This is a promise library for extjs. It's not promise/a+ compatible at the moment, because I want it to be more like a extjs component.</p>
+
+<h2>Usage</h2>
+
+<p>Install it using bower.
+<code>$ bower install ext.promise</code></p>
+
+<p>You need to add it to the classpath in your <code>app.json</code>.
+<code>json
+{
+    "classpath": "${app.dir}/app,${app.dir}/bower_components/ext.promise",
+}
+</code></p>
+
+<p>Add the path for <code>Ext.Promise</code> to your <code>app.js</code>.
+<code>js
+Ext.application({
+    name: 'ExampleApp',
+    paths: {
+        'Ext.promise': 'bower_components/ext.promise/lib'
+    }
+    /* ... */
+});
+</code></p>
+
+<p>If you need to access a return value instead of the returned Promise object, use returns():</p>
+
+<pre><code class="js">// msgBox has the instance of Ext.window.MessageBox, which is the original value of Ext.Msg.alert.
+var msgBox = Ext.Msg.alert().then().returns();
+</code></pre>
+
+<p>To return your own value, use Ext.promise.Promise.returnValue:</p>
+
+<pre><code class="js">function create() {
+    var deferred = Ext.create('<a href="#!/api/Ext.promise.Deferred" rel="Ext.promise.Deferred" class="docClass">Ext.promise.Deferred</a>');
+    deferred.promise.returnValue = 42;
+    return deferred.promise;    
+}
+
+var promise = create();
+var result = promise.then().returns(); // 42
+</code></pre>
+
+<h3>all</h3>
+
+<p><code>all</code> waits for all promises to be resolved</p>
+
+<pre><code class="js">Ext.Promises.all([d1.promise, d2.promise]).then(function() {
+    expect(d1.promise.state).toEqual(FULFILLED);
+    expect(d2.promise.state).toEqual(FULFILLED);
+    done();
+});
+</code></pre>
+
+<h3>some</h3>
+
+<p><code>some</code> waits for the first promise to be resolved</p>
+
+<pre><code class="js">Ext.Promises.all([d1.promise, d2.promise]).fail(function() {
+    expect(d1.promise.state).toEqual(FULFILLED);
+    done();
+});
+</code></pre>
+
+<h2>As a mixin</h2>
+
+<pre><code class="js">var munchkin;
+Ext.define('munchkin', {
+    mixins: ['<a href="#!/api/Ext.promise.Deferred" rel="Ext.promise.Deferred" class="docClass">Ext.promise.Deferred</a>'],
+    loot: function() {
+        var deferred = this.deferred(),
+            me = this;
+        setTimeout(function() {
+            me.resolve('a sword');
+            // me.reject(new Error('ERROR'));
+        }, 400);
+        return deferred.promise;
+    }
+});
+munchkin = Ext.create('munchkin');
+munchkin.loot()
+    .then(function(theLoot) {
+        console.log(theLoot);
+    })
+    .fail(function(error) {
+        console.error(error);
+    })
+    .done(function(value) {
+        console.log('Done is allways invoked');
+    });
+});
+</code></pre>
+
+<h2>Chains</h2>
+
+<p><code>then</code> is chainable. It gets the last returned value;
+<code>js
+munchkin = Ext.create('munchkin');
+munchkin.loot()
+    .then(function(theLoot) {
+        return 'Loot: ' + theLoot;
+    })
+    .then(function(theLoot) {
+        console.log(theLoot); // -&gt; Loot: a sword
+    });
+});
+</code>
+It is even possible to return a new promise in a <code>then</code>.
+<code>js
+munchkin = Ext.create('munchkin');
+munchkin.loot()
+    .then(function(theLoot) {
+        var deferred = Ext.create('<a href="#!/api/Ext.promise.Deferred" rel="Ext.promise.Deferred" class="docClass">Ext.promise.Deferred</a>');
+        setTimeout(function() {
+            deferred.resolve('a sword');
+        }, 400);
+        return deferred.promise;
+    })
+    .then(function(theLoot) {
+        console.log(theLoot); // called when deferred is resolved
+    });
+});
+</code></p>
+
+<h2>Require</h2>
+
+<p>You need to require the override class.
+<code>js
+Ext.require('Ext.promise.override.Require', function() {});
+</code></p>
+
+<p>Now you can use <code>Ext.require</code> as promised.
+<code>js
+Ext.require(['App.foo.*', 'App.model.User'])
+    .then(function() {
+        console.log('loaded');
+    });
+</code></p>
+
+<h2>Ajax</h2>
+
+<p>You need to require the override class.
+<code>js
+Ext.require('Ext.promise.override.Ajax', function() {});
+</code></p>
+
+<p>Now request returns a promise.
+<code>js
+Ext.Ajax.request({
+    url: 'test.json'
+}).then(function(response) {
+    console.log('SUCCESS');
+}).fail(function(response) {
+    console.log('ERROR');
+});
+</code></p>
+
+<h2>Model</h2>
+
+<p>You need to require the override class.
+<code>js
+Ext.require('Ext.promise.override.Model', function() {});
+</code></p>
+
+<p>Loading a record.
+```js
+Ext.define('MyApp.User', {
+    extend: 'Ext.data.Model',
+    fields: [
+        {name: 'id', type: 'int'},
+        {name: 'name', type: 'string'}
+    ]
+});</p>
+
+<p>MyApp.User.load(10)
+    .then(function(record) {
+        console.log('SUCCESS');
+    }).fail(function() {
+        console.log('ERROR');
+    });
+```</p>
+
+<p>Saving a model
+<code>js
+var user = Ext.create('MyApp.User', {
+    name: 'Stoeffel'
+});
+user.save()
+    .then(this.onSave, this)
+    .fail(this.onError, this)
+</code></p>
+
+<p>Deleting a model
+<code>js
+user.erase()
+    .then(this.onSave, this)
+    .fail(this.onError, this)
+</code></p>
+
+<h2>Ext.Msg / Ext.MessageBox</h2>
+
+<p>You need to require the override class:</p>
+
+<pre><code class="js">Ext.require('Ext.promise.override.Msg', function() {});
+</code></pre>
+
+<p>Show an alert message:</p>
+
+<pre><code class="js">Ext.Msg.alert('Error','Sorry, this should not happen')
+    .then(function(btn){
+        console.log(btn);
+    });
+</code></pre>
+
+<p>Note that Ext.Msg.show / Ext.MessageBox.show does NOT return the original Ext.window.MessageBox object, instead you get a promise object.</p>
+</div></div>
+            <div id='categories-content' style='display:none'>
+            <div class='section'>
+<h1>Ext</h1>
+<div class='left-column'>
+<h3>promise</h3>
+<ul class='links'>
+<li><a href="#!/api/Ext.promise.Collection" rel="Ext.promise.Collection" class="docClass">Ext.promise.Collection</a></li>
+<li><a href="#!/api/Ext.promise.Deferred" rel="Ext.promise.Deferred" class="docClass">Ext.promise.Deferred</a></li>
+<li><a href="#!/api/Ext.promise.Promise" rel="Ext.promise.Promise" class="docClass">Ext.promise.Promise</a></li>
+</ul>
+</div>
+<div class='middle-column'>
+</div>
+<div class='right-column'>
+</div>
+<div style='clear:both'></div>
+</div>
+          </div>
+
+  
+  
+  <div id='footer-content' style='display: none'>Generated on Fri 18 Jul 2014 08:30:42 by <a href='https://github.com/senchalabs/jsduck'>JSDuck</a> 5.3.4.</div>
+
+  
+
+  <script type="text/javascript">
+  (function(){
+    var protocol = (document.location.protocol === "https:") ? "https:" : "http:";
+    document.write("<link href='"+protocol+"//fonts.googleapis.com/css?family=Exo' rel='stylesheet' type='text/css' />");
+  })();
+  </script>
+
+</body>
+</html>
