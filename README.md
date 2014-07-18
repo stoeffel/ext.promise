@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/stoeffel/ext.promise.svg)](https://travis-ci.org/stoeffel/ext.promise)
+
 Ext.Promise
 ===========
 
