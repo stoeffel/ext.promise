@@ -23,5 +23,8 @@
   ],
   "devDependencies": {
     "jasmine": "~2.0.0"
+  },
+  "dependencies": {
+    "bower-extjs": "~0.0.4"
   }
 }

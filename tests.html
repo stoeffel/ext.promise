@@ -11,8 +11,10 @@
     <script type="text/javascript" src="http://cdn.sencha.com/ext/gpl/5.0.0/build/ext-all.js"></script>   
     <script type="text/javascript" src="./bower_components/jasmine/lib/jasmine-core/jasmine.js"></script>
     <script type="text/javascript" src="./bower_components/jasmine/lib/jasmine-core/jasmine-html.js"></script>
+    <script type="text/javascript" src="./bower_components/jasmine/lib/console/console.js"></script>
     <script type="text/javascript" src="./bower_components/jasmine/lib/jasmine-core/boot.js"></script>
 
+    <script src="./spec/sinon-1.10.3.js"></script>
 
     <!-- include spec files here... -->
     <script type="text/javascript" src="./spec/Deferred.js"></script>
@@ -22,5 +24,21 @@
 </head>
 
 <body>
+<script type="text/javascript">
+Ext.onReady(function() {
+  if (navigator.userAgent.indexOf("PhantomJS") > 0) {
+    var consoleReporter = new jasmineRequire.ConsoleReporter()({
+      showColors: true,
+      timer: new jasmine.Timer,
+      print: function(msg) {
+        console.log(msg);
+      }
+    });
+
+    jasmine.getEnv().addReporter(consoleReporter);
+    consoleReporter.jasmineStarted();
+  }
+});
+</script>
 </body>
 </html>

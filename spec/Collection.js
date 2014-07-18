@@ -45,10 +45,10 @@ describe('Collection', function() {
             Ext.Promises.all([d1.promise, d2.promise]).then(function() {
                 expect(d1.promise.state).toEqual(FULFILLED);
                 expect(d2.promise.state).toEqual(FULFILLED);
-                done();
             });
             d2.promise.next().then(function(value) {
                 expect(value).toEqual(42);
+                done();
             });
             d1.resolve(666);
             d2.resolve(42);
