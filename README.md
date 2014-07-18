@@ -10,6 +10,7 @@ Install it using bower.
 `$ bower install ext.promise`
 
 You need to add it to the classpath in your `app.json`.
+
 ```json
 {
     "classpath": "${app.dir}/app,${app.dir}/bower_components/ext.promise",
@@ -104,6 +105,7 @@ munchkin.loot()
 Chains
 ------
 `then` is chainable. It gets the last returned value;
+
 ```js
 munchkin = Ext.create('munchkin');
 munchkin.loot()
@@ -115,7 +117,9 @@ munchkin.loot()
     });
 });
 ```
+
 It is even possible to return a new promise in a `then`.
+
 ```js
 munchkin = Ext.create('munchkin');
 munchkin.loot()
@@ -135,11 +139,13 @@ munchkin.loot()
 Require
 -------
 You need to require the override class.
+
 ```js
 Ext.require('Ext.promise.override.Require', function() {});
 ```
 
 Now you can use `Ext.require` as promised.
+
 ```js
 Ext.require(['App.foo.*', 'App.model.User'])
     .then(function() {
@@ -150,11 +156,13 @@ Ext.require(['App.foo.*', 'App.model.User'])
 Ajax
 ----
 You need to require the override class.
+
 ```js
 Ext.require('Ext.promise.override.Ajax', function() {});
 ```
 
 Now request returns a promise.
+
 ```js
 Ext.Ajax.request({
     url: 'test.json'
@@ -169,11 +177,13 @@ Model
 -----
 
 You need to require the override class.
+
 ```js
 Ext.require('Ext.promise.override.Model', function() {});
 ```
 
 Loading a record.
+
 ```js
 Ext.define('MyApp.User', {
     extend: 'Ext.data.Model',
@@ -192,6 +202,7 @@ MyApp.User.load(10)
 ```
 
 Saving a model
+
 ```js
 var user = Ext.create('MyApp.User', {
     name: 'Stoeffel'
@@ -202,6 +213,7 @@ user.save()
 ```
 
 Deleting a model
+
 ```js
 user.erase()
     .then(this.onSave, this)
