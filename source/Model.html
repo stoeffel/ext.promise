@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">Ext.define('Ext.promise.override.Model', {
+    override: 'Ext.data.Model',
+    statics: {
+        load: function(id, options, session) {
+            var deferred = Ext.create('Ext.promise.Deferred').deferred();
+            options = options || {};
+            Ext.applyIf(options, deferred.getSuccessFailure(deferred));
+            deferred.promise.returnValue = this.callParent([id, options, session]);
+            return deferred.promise;
+        }
+    },
+    load: function(options) {
+        var deferred = Ext.create('Ext.promise.Deferred').deferred();
+        options = options || {};
+        Ext.applyIf(options, deferred.getSuccessFailure(deferred));
+        deferred.promise.returnValue = this.callParent([options]);
+        return deferred.promise;
+    },
+    save: function(options) {
+        var deferred = Ext.create('Ext.promise.Deferred').deferred();
+        options = options || {};
+        Ext.applyIf(options, deferred.getSuccessFailure(deferred));
+        deferred.promise.returnValue = this.callParent([options]);
+        return deferred.promise;
+    }
+});
+</pre>
+</body>
+</html>
