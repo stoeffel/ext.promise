@@ -15,7 +15,10 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js">Ext.define('Ext.promise.override.Msg', function() {
+  <pre class="prettyprint lang-js"><span id='Ext-promise-override-Msg'>/**
+</span> * Adds promise to Ext.Msg
+ */
+Ext.define('Ext.promise.override.Msg', function() {
     var msgShow = Ext.Msg.show;
     Ext.Msg.show = function(cfg) {
         cfg = cfg || {};

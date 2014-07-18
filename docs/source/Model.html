@@ -15,26 +15,29 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js">Ext.define('Ext.promise.override.Model', {
+  <pre class="prettyprint lang-js"><span id='Ext-promise-override-Model'>/**
+</span> * Adds promise to the Ext.data.Model class.
+ */
+Ext.define('Ext.promise.override.Model', {
     override: 'Ext.data.Model',
     statics: {
-        load: function(id, options, session) {
-            var deferred = Ext.create('Ext.promise.Deferred').deferred();
+<span id='Ext-promise-override-Model-static-method-load'>        load: function(id, options, session) {
+</span>            var deferred = Ext.create('Ext.promise.Deferred').deferred();
             options = options || {};
             Ext.applyIf(options, deferred.getSuccessFailure(deferred));
             deferred.promise.returnValue = this.callParent([id, options, session]);
             return deferred.promise;
         }
     },
-    load: function(options) {
-        var deferred = Ext.create('Ext.promise.Deferred').deferred();
+<span id='Ext-promise-override-Model-method-load'>    load: function(options) {
+</span>        var deferred = Ext.create('Ext.promise.Deferred').deferred();
         options = options || {};
         Ext.applyIf(options, deferred.getSuccessFailure(deferred));
         deferred.promise.returnValue = this.callParent([options]);
         return deferred.promise;
     },
-    save: function(options) {
-        var deferred = Ext.create('Ext.promise.Deferred').deferred();
+<span id='Ext-promise-override-Model-method-save'>    save: function(options) {
+</span>        var deferred = Ext.create('Ext.promise.Deferred').deferred();
         options = options || {};
         Ext.applyIf(options, deferred.getSuccessFailure(deferred));
         deferred.promise.returnValue = this.callParent([options]);

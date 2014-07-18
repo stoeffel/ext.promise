@@ -15,7 +15,10 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js">Ext.define('Ext.promise.override.Require', function() {
+  <pre class="prettyprint lang-js"><span id='Ext-promise-override-Require'>/**
+</span> * Adds promise to Ext.require
+ */
+Ext.define('Ext.promise.override.Require', function() {
     var extRequire = Ext.require;
     Ext.require = function(expressions, fn, scope) {
         if (fn) {

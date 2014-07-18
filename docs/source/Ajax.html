@@ -15,7 +15,10 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js">Ext.define('Ext.promise.override.Ajax', function() {
+  <pre class="prettyprint lang-js"><span id='Ext-promise-override-Ajax'>/**
+</span> * Adds promise to Ext.Ajax.
+ */
+Ext.define('Ext.promise.override.Ajax', function() {
     var request = Ext.Ajax.request;
     Ext.Ajax.request = function(options) {
         var deferred = Ext.create('Ext.promise.Deferred').deferred();
