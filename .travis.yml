@@ -4,4 +4,5 @@ node_js:
 before_script:
   - npm install -g bower
   - bower install
-phantomjs run-jasmine.js tests.html
+script:
+  - phantomjs run-jasmine.js tests.html
