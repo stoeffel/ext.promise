@@ -29,7 +29,7 @@ page.onConsoleMessage = function (msg) {
     match = noReallyDoneRegEx.exec(msg);
     if (match) {
         system.stdout.writeLine("");
-        phantom.exit(rc || 1);
+        phantom.exit(rc || 0);
     }
 };
 
