@@ -98,6 +98,36 @@ describe('Overrides', function() {
         });
     });
 
+    describe('Store', function() {
+        var store, errorStore;
+        beforeEach(function(done) {
+            Ext.require(['Ext.promise.override.Store', 'Fixtures.Store', 'Fixtures.ErrorStore'], function() {
+                store = new Fixtures.Store();
+                errorStore = new Fixtures.ErrorStore();
+                done();
+            });
+        });
+
+        describe('#load', function() {
+            it('should return a promise', function() {
+                expect(store.load().then).toBeDefined();
+            });
+
+            it('should call then on success', function(done) {
+                store.load().fail(Ext.emptyFn).then(function(records) {
+                    expect(records.length).toEqual(1);
+                    done();
+                }).fail(Ext.emptyFn);
+            });
+
+            it('should call fail on error', function(done) {
+                errorStore.load().fail(function() {
+                    done();
+                });
+            });
+        });
+    });
+
     describe('Model', function() {
         beforeEach(function(done) {
             Ext.require(['Ext.promise.override.Model', 'Fixtures.Model', 'Fixtures.ErrorModel'], function() {

@@ -67,7 +67,7 @@ Ext.Promises.all([d1.promise, d2.promise]).then(function() {
 `some` waits for the first promise to be resolved
 
 ```js
-Ext.Promises.all([d1.promise, d2.promise]).fail(function() {
+Ext.Promises.some([d1.promise, d2.promise]).fail(function() {
     expect(d1.promise.state).toEqual(FULFILLED);
     done();
 });
@@ -222,6 +222,25 @@ user.erase()
     .fail(this.onError, this)
 ```
 
+Store
+-----
+
+You need to require the override class.
+
+```js
+Ext.require('Ext.promise.override.Store', function() {});
+```
+
+Loading data.
+
+```js
+myStore.load()
+    .then(function(records) {
+        console.log('SUCCESS');
+    }).fail(function() {
+        console.log('ERROR');
+    });
+```
 
 Ext.Msg / Ext.MessageBox
 ------------------------
